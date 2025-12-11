@@ -1,5 +1,6 @@
 l1 = log --oneline
 chp = cherry-pick
+c = commit -am
 s = status
 co = checkout -b
 squash = rebase -i
@@ -23,4 +24,6 @@ safe-rebase = "!f() { \
         git cherry-pick $BACKUP; \
         echo \"Done! Review changes, then delete backup with: git branch -D $BACKUP\"; \
     }; f"
+set-vscode = config --global core.editor "code --wait"
+set-pull-rebase = config --global pull.rebase true
 

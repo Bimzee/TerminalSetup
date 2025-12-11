@@ -79,6 +79,31 @@ C:\Code\MyProject [ feature-branch ]>
 
 The format is: `[ <branchName> ]` (with spaces inside the brackets)
 
+### Posh-Git Version Compatibility
+
+The script automatically detects your posh-git version and uses the correct prompt property names. Different posh-git versions expose different property interfaces:
+
+- **Recent versions (v2+)**: Uses `BeforeStatus`/`AfterStatus` properties
+- **Older versions**: May use `BeforeText`/`AfterText` or `BeforePath`/`AfterPath`
+- **Fallback**: If none are found, the script creates a simple `BeforeText`/`AfterText` object
+
+The script handles all variants automatically with no additional configuration needed.
+
+## Testing
+
+Run the unit test suite to verify the alias parser:
+
+```powershell
+.\Test-GitAliasParser.ps1
+```
+
+This tests:
+- Single-line and multi-line aliases
+- Multi-line aliases with continuation characters (`\`)
+- Invalid line handling
+- Empty line handling
+- Special characters in commands
+
 ## Script Parameters
 
 ### Using Local File
@@ -178,9 +203,17 @@ If you prefer manual setup:
 4. Add to your PowerShell profile (`$PROFILE`):
    ```powershell
    Import-Module posh-git
-   $GitPromptSettings.BeforeText = '[ '
-   $GitPromptSettings.AfterText = ' ]'
+   # Property names vary by posh-git version; use whichever exists:
+   if ($GitPromptSettings.PSObject.Properties['BeforeText']) {
+       $GitPromptSettings.BeforeText = '[ '
+       $GitPromptSettings.AfterText = ' ]'
+   }
+   elseif ($GitPromptSettings.PSObject.Properties['BeforeStatus']) {
+       $GitPromptSettings.BeforeStatus = '[ '
+       $GitPromptSettings.AfterStatus = ' ]'
+   }
    ```
+   Or simply run the automated script above for automatic handling.
 
 ## Contributing
 
