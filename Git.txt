@@ -1,0 +1,26 @@
+l1 = log --oneline
+chp = cherry-pick
+s = status
+co = checkout -b
+squash = rebase -i
+current = rev-parse --abbrev-ref HEAD
+remote-diff = !CURRENT=$(git current) && git diff $CURRENT..$1/$CURRENT
+upload = !git push origin $(git symbolic-ref --short HEAD)
+u = !git push origin $(git symbolic-ref --short HEAD)
+download = !git pull origin $(git symbolic-ref --short HEAD)
+d = !git pull origin $(git symbolic-ref --short HEAD)
+ri = '!f() { git rebase -i HEAD~${1}; }; f'
+safe-rebase = "!f() { \
+        CURRENT=$(git branch --show-current); \
+        BACKUP=\"${CURRENT}-backup-$(date +%Y%m%d-%H%M%S)\"; \
+        echo \"Creating backup branch: $BACKUP\"; \
+        git branch $BACKUP; \
+        git fetch origin; \
+        git checkout main; \
+        git pull origin main; \
+        git checkout -b ${CURRENT}-rebased; \
+        echo \"Cherry-picking commits from $BACKUP...\"; \
+        git cherry-pick $BACKUP; \
+        echo \"Done! Review changes, then delete backup with: git branch -D $BACKUP\"; \
+    }; f"
+
