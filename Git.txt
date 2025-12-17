@@ -10,6 +10,7 @@ upload = !git push origin $(git symbolic-ref --short HEAD)
 u = !git push origin $(git symbolic-ref --short HEAD)
 download = !git pull origin $(git symbolic-ref --short HEAD)
 d = !git pull origin $(git symbolic-ref --short HEAD)
+m = merge origin/main
 ri = '!f() { git rebase -i HEAD~${1}; }; f'
 safe-rebase = "!f() { \
         CURRENT=$(git branch --show-current); \
