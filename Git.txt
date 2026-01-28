@@ -1,18 +1,25 @@
-l1 = log --oneline
-chp = cherry-pick
-c = commit -am
-s = status
-co = checkout -b
-squash = rebase -i
-current = rev-parse --abbrev-ref HEAD
-remote-diff = !CURRENT=$(git current) && git diff $CURRENT..$1/$CURRENT
-upload = !git push origin $(git symbolic-ref --short HEAD)
-u = !git push origin $(git symbolic-ref --short HEAD)
-download = !git pull origin $(git symbolic-ref --short HEAD)
-d = !git pull origin $(git symbolic-ref --short HEAD)
-m = merge origin/main
-ri = '!f() { git rebase -i HEAD~${1}; }; f'
-safe-rebase = "!f() { \
+l1 = log --oneline -n 25
+	chp = cherry-pick
+	s = status
+	sw = switch
+	co = checkout -b
+	rbase = rebase origin/main
+	rebase = rebase -i
+	squash = rebase -i HEAD~
+	current = rev-parse --abbrev-ref HEAD
+	delete = branch -D 
+	rename = branch -m $(git symbolic-ref --short HEAD)
+	remote-diff = !CURRENT=$(git current) && git diff $CURRENT..$1/$CURRENT
+	upload = !git push origin $(git symbolic-ref --short HEAD)
+	u = !git push origin $(git symbolic-ref --short HEAD)
+	uf = git push origin $(git symbolic-ref --short HEAD) --force-with-lease
+	download = !git pull origin $(git symbolic-ref --short HEAD)
+	d = !git pull origin $(git symbolic-ref --short HEAD)
+	c = commit -am 
+	m = merge origin/main
+	sync = d && git u
+	ri = '!f() { git rebase -i HEAD~${1}; }; f'
+	safe-rebase = "!f() { \
         CURRENT=$(git branch --show-current); \
         BACKUP=\"${CURRENT}-backup-$(date +%Y%m%d-%H%M%S)\"; \
         echo \"Creating backup branch: $BACKUP\"; \
